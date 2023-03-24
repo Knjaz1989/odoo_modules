@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <template id="inherit_saleorder_reports" inherit_id="sale.report_saleorder_document">
+      <xpath expr="//div[@id='informations']//div[last()]" position="after">
+        <div t-if="doc.test" class="col-auto col-3 mw-100 mb-2">
+          <strong>Test value:</strong>
+          <p class="m-0" t-field="doc.test"/>
+        </div>
+      </xpath>
+    </template>
+  </data>
+</openerp>
