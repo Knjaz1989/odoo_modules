@@ -12,10 +12,14 @@ class SaleOrder(models.Model):
         string='Test value',
     )
 
-    @api.onchange('date_order', 'amount_total')
-    def _change_test_field(self):
+    @api.onchange('date_order', 'order_line')
+    def _onchange_test(self):
         for rec in self:
-            rec.test = f'{rec.amount_total} - {rec.date_order}'
+            if not rec.partner_id:
+                rec.test = str(randrange(100000000))
+            else:
+                date = rec.date_order.strftime('%m/%d/%Y %H:%M:%S')
+                rec.test = f'{rec.amount_total} - {date}'
 
     @api.constrains('test')
     def check_len_field(self):
@@ -24,9 +28,3 @@ class SaleOrder(models.Model):
                 raise ValidationError(
                     'Длина текста должна быть меньше 50 символов!'
                 )
-    
-    @api.model
-    def create(self, vals):
-        if not vals.get('test'):
-            vals['test'] = str(randrange(100000000))
-        return super().create(vals)
